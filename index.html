@@ -20,9 +20,21 @@
             </header>
             
             <ul class="projects">
-                <li><button class="project-btn" data-project="acam">[01] A-CAM</button></li>
-                <li><button class="project-btn" data-project="collage">[02] COLLAGE MACHINE</button></li>
-                <li><button class="project-btn" data-project="bct">[03] B.C.T. ENGINE</button></li>
+                <li>
+                    <button class="project-btn" data-project="acam">
+                        [01] A-CAM <span class="status-tag">[ PAID_ACCESS ]</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="project-btn" data-project="collage">
+                        [02] COLLAGE MACHINE <span class="status-tag">[ PRO_V1 ]</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="project-btn" data-project="bct">
+                        [03] B.C.T. ENGINE <span class="status-tag">[ R&D ]</span>
+                    </button>
+                </li>
             </ul>
             
             <footer class="footer-info">
@@ -34,14 +46,38 @@
         <!-- Right Object Box Column -->
         <section class="object-box-column">
             <div class="object-box" id="object-box">
-                <!-- Static State content -->
+                <!-- Static State: Mission Statement -->
+                <div id="main-display" class="main-display">
+                    <div class="mission-container">
+                        <h3>[ ROOT ] // MISSION_STATEMENT</h3>
+                        <p class="quote">"I BUILD FOR THE WORKFLOWS THAT DON'T EXIST YET."</p>
+                        
+                        <div class="mission-text">
+                            <p>IN-NO-V8 LABS is my private R&D environment for digital content workflows. After 16 years of delivering content for HBO, Intel, and global festivals, I identified a recurring bottleneck: the gap between human creative intent and machine-learning randomness.</p>
+                            <p>I built this lab to close that gap. Every tool here was developed to solve a problem in my own production house first.</p>
+                        </div>
+
+                        <div class="faq-section">
+                            <h3>[ FAQ ]</h3>
+                            <div class="faq-item">
+                                <span class="faq-q">Q: A-CAM Logic?</span>
+                                <span class="faq-a">A director’s interface for cinematic AI generation. Precise shot logic and focal length control for professional consistency.</span>
+                            </div>
+                            <div class="faq-item">
+                                <span class="faq-q">Q: Collage Logic?</span>
+                                <span class="faq-a">Procedural asset arrangement for high-speed editorial and archival curation.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wireframe (Layered/Secondary) -->
                 <div class="wireframe-placeholder" id="wireframe">
                     <svg width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
                         <line x1="0" y1="0" x2="100%" y2="100%" class="wireframe-line" />
                         <line x1="100%" y1="0" x2="0" y2="100%" class="wireframe-line" />
                         <rect x="0" y="0" width="100%" height="100%" class="wireframe-border" />
                     </svg>
-                    <div class="wireframe-label">AWAITING_SELECTION</div>
                 </div>
 
                 <!-- Immersive State content (Hidden initially) -->
