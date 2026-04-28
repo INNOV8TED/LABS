@@ -31,29 +31,31 @@
             </footer>
         </nav>
 
-        <!-- Right Object Box -->
-        <section class="object-box" id="object-box">
-            <!-- Static State content -->
-            <div class="wireframe-placeholder" id="wireframe">
-                <svg width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="0" y1="0" x2="100%" y2="100%" class="wireframe-line" />
-                    <line x1="100%" y1="0" x2="0" y2="100%" class="wireframe-line" />
-                    <rect x="0" y="0" width="100%" height="100%" class="wireframe-border" />
-                </svg>
-                <div class="wireframe-label">AWAITING_SELECTION</div>
-            </div>
-
-            <!-- Immersive State content (Hidden initially) -->
-            <div class="immersive-content" id="immersive-content">
-                <button class="exit-btn" id="exit-btn" aria-label="Exit immersive mode">[ ESC ]</button>
-                
-                <div class="feed-container">
-                    <div class="video-placeholder">
-                        <div class="video-mock" id="video-label">A-CAM_FEED_ACTIVE</div>
-                    </div>
+        <!-- Right Object Box Column -->
+        <section class="object-box-column">
+            <div class="object-box" id="object-box">
+                <!-- Static State content -->
+                <div class="wireframe-placeholder" id="wireframe">
+                    <svg width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0" y1="0" x2="100%" y2="100%" class="wireframe-line" />
+                        <line x1="100%" y1="0" x2="0" y2="100%" class="wireframe-line" />
+                        <rect x="0" y="0" width="100%" height="100%" class="wireframe-border" />
+                    </svg>
+                    <div class="wireframe-label">AWAITING_SELECTION</div>
                 </div>
 
-                <div class="live-logic-overlay" id="live-logic"></div>
+                <!-- Immersive State content (Hidden initially) -->
+                <div class="immersive-content" id="immersive-content">
+                    <button class="exit-btn" id="exit-btn" aria-label="Exit immersive mode">[ ESC ]</button>
+                    
+                    <div class="feed-container">
+                        <div class="video-placeholder">
+                            <div class="video-mock" id="video-label">A-CAM_FEED_ACTIVE</div>
+                        </div>
+                    </div>
+
+                    <div class="live-logic-overlay" id="live-logic"></div>
+                </div>
             </div>
         </section>
     </main>
