@@ -123,7 +123,7 @@ body {
 }
 
 .projects li {
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-6);
 }
 
 .project-btn {
@@ -135,7 +135,7 @@ body {
     text-align: left;
     color: var(--text-color);
     transition: transform 200ms ease, color 200ms ease;
-    padding: var(--space-1) 0;
+    padding: var(--space-2) 0;
     display: flex;
     align-items: center;
     gap: var(--space-2);
@@ -162,17 +162,48 @@ body {
     padding-top: var(--space-3);
 }
 
-/* Static State: Mission Statement & Wireframe */
+/* Static State: Active Workbench (Terminal) */
+.object-box {
+    width: 100%;
+    height: 100%;
+    max-width: 900px;
+    max-height: 700px;
+    background-color: #111;
+    border: 1px solid var(--border-color);
+    position: relative;
+    transition: all var(--transition-zoom);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #CCC;
+}
+
 .main-display {
     width: 100%;
     height: 100%;
-    padding: var(--space-6);
+    padding: var(--space-8);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     transition: opacity var(--transition-fast);
     z-index: 5;
-    overflow-y: auto;
+}
+
+.workbench-top {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.workbench-bottom {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: var(--space-6);
 }
 
 .zoomed .main-display {
@@ -180,84 +211,48 @@ body {
     pointer-events: none;
 }
 
-.mission-container {
-    max-width: 600px;
-}
-
 h3 {
     font-size: 0.875rem;
     font-weight: 700;
     margin-bottom: var(--space-4);
-    color: var(--text-color);
+    color: rgba(255, 255, 255, 0.5);
     letter-spacing: 1px;
 }
 
 .quote {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.1;
     margin-bottom: var(--space-4);
     text-transform: uppercase;
+    color: #FFF;
 }
 
 .mission-text {
-    font-size: 0.95rem;
+    font-size: 1rem;
     line-height: 1.6;
-    margin-bottom: var(--space-6);
-    opacity: 0.9;
+    max-width: 500px;
 }
 
-.mission-text p {
-    margin-bottom: var(--space-3);
+.status-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
 }
 
-.faq-section {
-    margin-top: var(--space-4);
-    border-top: 1px solid rgba(0,0,0,0.1);
-    padding-top: var(--space-4);
-}
-
-.faq-item {
-    margin-bottom: var(--space-3);
+.status-item {
     font-size: 0.875rem;
 }
 
-.faq-q {
+.status-item .label {
     font-weight: 700;
+    color: #FFF;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
-.faq-a {
-    display: block;
-    opacity: 0.8;
-}
-
-.wireframe-placeholder {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity var(--transition-fast);
-    pointer-events: none;
-    opacity: 0.1; /* Subtler when text is present */
-}
-
-.wireframe-line {
-    stroke: var(--border-color);
-    stroke-width: 1px;
-    vector-effect: non-scaling-stroke;
-}
-
-.wireframe-border {
-    fill: none;
-    stroke: var(--border-color);
-    stroke-width: 1px;
-    vector-effect: non-scaling-stroke;
+.status-item .value {
+    opacity: 0.7;
 }
 
 /* Immersive State Content */
