@@ -1,15 +1,15 @@
 :root {
-    --bg-color: #F4F4F4;
-    --text-color: #000000;
-    --border-color: #000000;
+    --bg-color: #D4D1CB;
+    --text-color: #28282A;
+    --border-color: #28282A;
     --expanded-bg: #000000;
     --expanded-text: #FFFFFF;
     
     /* Project Accents */
     --accent-acam: #FF0000;
-    --accent-collage: #FFFFFF;
+    --accent-collage: #28282A;
     
-    --font-mono: 'Roboto Mono', monospace;
+    --font-primary: 'Archivo', sans-serif;
     
     --space-1: 4px;
     --space-2: 8px;
@@ -24,20 +24,6 @@
     --transition-fast: 300ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.status-indicator {
-    font-size: 0.75rem;
-    padding: var(--space-1) var(--space-2);
-    border: 1px solid var(--border-color);
-    display: inline-block;
-    transition: background-color 200ms ease, color 200ms ease;
-}
-
-.acam-theme .status-indicator {
-    background-color: var(--accent-acam);
-    color: #FFF;
-    border-color: var(--accent-acam);
-}
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -45,18 +31,17 @@
 }
 
 body {
-    font-family: var(--font-mono);
+    font-family: var(--font-primary);
     background-color: var(--bg-color);
     color: var(--text-color);
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
+    overflow-x: hidden;
+    min-height: 100vh;
 }
 
 .grid-container {
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
     background-color: var(--bg-color);
     transition: background-color var(--transition-zoom);
 }
@@ -67,13 +52,14 @@ body {
 
 .project-list {
     width: 30%;
-    height: 100%;
-    border-right: 2px solid var(--border-color); /* Thicker border for Brutalist impact */
+    height: 100vh;
+    border-right: 2px solid var(--border-color);
     display: flex;
     flex-direction: column;
     padding: var(--space-6);
-    transition: none; /* No smooth transition for Brutalist raw feel */
-    z-index: 1;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .is-expanded .project-list {
@@ -84,11 +70,34 @@ body {
 
 .object-box-column {
     width: 70%;
-    height: 100%;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: var(--space-8);
+}
+
+.header h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: -0.07em;
+    line-height: 0.8;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+}
+
+.status-indicator {
+    font-size: 0.75rem;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--border-color);
+    display: inline-block;
+    font-weight: 700;
+}
+
+.acam-theme .status-indicator {
+    background-color: var(--accent-acam);
+    color: #FFF;
+    border-color: var(--accent-acam);
 }
 
 .directory {
@@ -96,30 +105,29 @@ body {
 }
 
 .projects li {
+    list-style: none;
     margin-bottom: var(--space-6);
 }
 
 .project-btn {
     background: none;
     border: none;
-    font-family: var(--font-mono);
-    font-size: 1.1rem;
+    font-family: var(--font-primary);
+    font-size: 1.25rem;
+    font-weight: 700;
     cursor: pointer;
     text-align: left;
     color: var(--text-color);
-    transition: none; /* Hard transition */
-    padding: var(--space-2) 0;
+    padding: var(--space-1) 0;
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    text-transform: uppercase;
 }
 
 .project-btn:hover {
-    font-weight: 700;
-    text-decoration: underline;
-    background-color: var(--border-color);
-    color: var(--bg-color);
-    padding-left: var(--space-2);
+    font-weight: 900;
+    text-decoration: none;
 }
 
 .status-tag {
@@ -130,7 +138,8 @@ body {
 }
 
 .project-btn:hover .status-tag {
-    border-color: var(--bg-color);
+    background-color: var(--border-color);
+    color: var(--bg-color);
 }
 
 .footer-info {
@@ -142,14 +151,11 @@ body {
     margin-top: auto;
 }
 
-/* Static State: Active Workbench (Terminal) */
+/* Workbench State */
 .object-box {
     width: 100%;
     height: 100%;
-    max-width: none; /* Fill more space */
-    max-height: none;
     background-color: #111;
-    border: none;
     position: relative;
     transition: all var(--transition-zoom);
     display: flex;
@@ -170,12 +176,35 @@ body {
     z-index: 5;
 }
 
+.zoomed .main-display, .is-expanded .main-display {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
 .workbench-top {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-top: var(--space-4);
+}
+
+.quote {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 0.85;
+    text-transform: uppercase;
+    color: #FFF;
+    letter-spacing: -0.07em;
+}
+
+.mission-text {
+    font-size: 1.1rem;
+    line-height: 1.2;
+    max-width: 550px;
+    border-left: 2px solid #FFF;
+    padding-left: var(--space-4);
+    margin-top: var(--space-4);
 }
 
 .workbench-bottom {
@@ -187,11 +216,6 @@ body {
     padding-top: var(--space-6);
 }
 
-.zoomed .main-display {
-    opacity: 0;
-    pointer-events: none;
-}
-
 h3 {
     font-size: 0.75rem;
     font-weight: 700;
@@ -200,26 +224,6 @@ h3 {
     letter-spacing: 2px;
 }
 
-.quote {
-    font-size: 2.5rem; /* Massive Brutalist type */
-    font-weight: 700;
-    line-height: 1.0;
-    margin-bottom: var(--space-4);
-    text-transform: uppercase;
-    color: #FFF;
-    letter-spacing: -2px;
-}
-
-.mission-text {
-    font-size: 1rem;
-    line-height: 1.4;
-    max-width: 550px;
-    border-left: 2px solid #FFF;
-    padding-left: var(--space-4);
-    margin-top: var(--space-4);
-}
-
-/* Status Table Look */
 .status-table {
     border: 1px solid rgba(255, 255, 255, 0.2);
     width: 100%;
@@ -251,7 +255,7 @@ h3 {
     opacity: 0.8;
 }
 
-/* Immersive State Content */
+/* Immersive State */
 .immersive-content {
     width: 100%;
     height: 100%;
@@ -275,20 +279,16 @@ h3 {
     color: var(--expanded-text);
     border: 1px solid var(--expanded-text);
     padding: var(--space-2) var(--space-3);
-    font-family: var(--font-mono);
+    font-family: var(--font-primary);
     font-size: 1rem;
     cursor: pointer;
     z-index: 1000;
 }
 
-.exit-btn:hover {
-    background: var(--expanded-text);
-    color: var(--expanded-bg);
-}
-
 .feed-container {
     width: 100%;
-    max-width: 45vh;
+    max-width: 90%;
+    max-height: 85vh;
     aspect-ratio: 9 / 16;
     border: 1px solid var(--expanded-text);
     position: relative;
@@ -297,16 +297,17 @@ h3 {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
     background-position: center;
 }
 
 .acam-theme .feed-container {
-    background-image: url('acam_interface_preview_1777385341722.png');
+    background-image: url('acam_preview.png');
 }
 
 .collage-theme .feed-container {
-    background-image: url('collage_machine_preview_1777385370107.png');
+    background-image: url('collage_preview.png');
 }
 
 .video-mock {
@@ -342,8 +343,44 @@ h3 {
     50% { opacity: 0.3; }
 }
 
+/* Media Queries */
+@media (max-width: 1024px) {
+    .grid-container {
+        flex-direction: column;
+    }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    .project-list {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 2px solid var(--border-color);
+        padding: var(--space-4);
+    }
+
+    .object-box-column {
+        width: 100%;
+        height: auto;
+        padding: var(--space-4);
+    }
+
+    .object-box {
+        min-height: 60vh;
+    }
+
+    .header h1 {
+        font-size: 2.2rem;
+    }
+
+    .quote {
+        font-size: 2.2rem;
+    }
+
+    .main-display {
+        padding: var(--space-4);
+    }
+
+    .status-cell.label {
+        width: 80px;
+    }
 }
