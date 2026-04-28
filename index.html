@@ -76,9 +76,17 @@
                 <div class="immersive-content" id="immersive-content">
                     <button class="exit-btn" id="exit-btn" aria-label="Exit immersive mode">[ ESC ]</button>
                     
-                    <div class="feed-container">
-                        <div class="video-placeholder">
-                            <div class="video-mock" id="video-label">A-CAM_FEED_ACTIVE</div>
+                    <div class="immersive-center-wrap">
+                        <div class="feed-container" id="slideshow-container">
+                            <div class="slide active" id="slide-display"></div>
+                            <div class="video-mock" id="video-label">LIVE_SIGNAL_ACTIVE</div>
+                        </div>
+                        
+                        <div class="immersive-actions">
+                            <a href="#" id="open-app-link" target="_blank" class="action-btn">
+                                [ OPEN_APPLICATION ]
+                                <span class="btn-scan-line"></span>
+                            </a>
                         </div>
                     </div>
 

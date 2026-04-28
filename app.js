@@ -5,9 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const exitBtn = document.getElementById('exit-btn');
     const videoLabel = document.getElementById('video-label');
     const liveLogicOverlay = document.getElementById('live-logic');
-    
-    let logicInterval = null;
+    const slideDisplay = document.getElementById('slide-display');
+    const openAppLink = document.getElementById('open-app-link');
+    const mainDisplay = document.getElementById('main-display');
+
     let initialBounds = null;
+    let slideshowInterval = null;
+    let textDecoderInterval = null;
+    let currentSlideIndex = 0;
 
     const defaultMission = `
         <div class="workbench-top">
@@ -37,6 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const projectData = {
         acam: {
             theme: 'acam-theme',
+            accent: 'var(--accent-acam)',
+            appUrl: 'https://a-cam.in-no-v8.com/',
+            slides: [
+                'acam_slide_1.png',
+                'acam_slide_2.png',
+                'acam_slide_3.png',
+                'acam_logo_full.png'
+            ],
+            aboutText: `A-CAM translates traditional cinematography into AI-native workflows. By abstracting lens choice, movement, and lighting into a director's interface, it removes the 'randomness' of diffusion models.\n\nDeveloped for high-end production environments, the tool bridges the gap between creative intent and procedural randomness. It allows directors to maintain absolute visual consistency across generative sequences using proprietary shot-logic mapping.`,
             content: `
                 <div class="workbench-top">
                     <h3>[ CMD ] // A-CAM_CORE</h3>
@@ -57,10 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="status-cell label">LENSES</div>
                                 <div class="status-cell value">14mm Ultra-Wide to 200mm Telephoto</div>
                             </div>
-                            <div class="status-row">
-                                <div class="status-cell label">MOVES</div>
-                                <div class="status-cell value">Dolly, Pan, Tilt, Orbital, Handheld</div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -68,6 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         collage: {
             theme: 'collage-theme',
+            accent: 'var(--accent-collage)',
+            appUrl: 'https://collage.in-no-v8.com/',
+            slides: [
+                'collage_preview.png'
+            ],
+            aboutText: `COLLAGE MACHINE is a high-speed editorial engine for archival media. It uses procedural arrangement to identify visual patterns across massive datasets, enabling instant curation of disparate assets.\n\nIt enables creators to source and serialize high-density visual information with zero latency, utilizing non-linear chronological mapping to build complex editorial sequences in seconds.`,
             content: `
                 <div class="workbench-top">
                     <h3>[ CMD ] // COLLAGE_LOGIC</h3>
@@ -85,10 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="status-cell value">High-Speed Asset Serialization</div>
                             </div>
                             <div class="status-row">
-                                <div class="status-cell label">SOURCE</div>
-                                <div class="status-cell value">Archival, Editorial, and R&D Datasets</div>
-                            </div>
-                            <div class="status-row">
                                 <div class="status-cell label">LOGIC</div>
                                 <div class="status-cell value">Non-Linear Chronological Mapping</div>
                             </div>
@@ -99,17 +111,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const mainDisplay = document.getElementById('main-display');
+    // Text Decoder Effect
+    function startTextDecoder(text) {
+        if (textDecoderInterval) clearInterval(textDecoderInterval);
+        liveLogicOverlay.textContent = '';
+        let i = 0;
+        const chars = "0123456789ABCDEF!@#$%^&*()_+";
+        
+        textDecoderInterval = setInterval(() => {
+            if (i < text.length) {
+                const randomPart = chars[Math.floor(Math.random() * chars.length)];
+                liveLogicOverlay.textContent = text.substring(0, i) + randomPart;
+                if (i % 2 === 0) i++; // Speed it up slightly
+            } else {
+                liveLogicOverlay.textContent = text;
+                clearInterval(textDecoderInterval);
+            }
+            liveLogicOverlay.scrollTop = liveLogicOverlay.scrollHeight;
+        }, 10);
+    }
 
-    // Expand state
+    // Slideshow Logic
+    function startSlideshow(project) {
+        if (slideshowInterval) clearInterval(slideshowInterval);
+        const data = projectData[project];
+        if (!data || !data.slides.length) return;
+
+        currentSlideIndex = 0;
+        const updateSlide = () => {
+            slideDisplay.style.backgroundImage = `url('${data.slides[currentSlideIndex]}')`;
+            currentSlideIndex = (currentSlideIndex + 1) % data.slides.length;
+        };
+
+        updateSlide();
+        slideshowInterval = setInterval(updateSlide, 3000);
+    }
+
+    // Hover logic for directory
     projectBtns.forEach(btn => {
         btn.addEventListener('mouseover', () => {
             if (mainContainer.classList.contains('is-expanded')) return;
             const project = btn.getAttribute('data-project');
             const data = projectData[project];
+            
             if (data) {
                 mainDisplay.innerHTML = data.content;
                 document.body.classList.add(data.theme);
+                objectBox.classList.add('has-preview', `${project}-preview`);
             }
         });
 
@@ -117,29 +165,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (mainContainer.classList.contains('is-expanded')) return;
             mainDisplay.innerHTML = defaultMission;
             document.body.classList.remove('acam-theme', 'collage-theme');
+            objectBox.classList.remove('has-preview', 'acam-preview', 'collage-preview');
         });
 
         btn.addEventListener('click', () => {
             const project = btn.getAttribute('data-project');
-            const projectCode = project.toUpperCase();
-            videoLabel.textContent = `${projectCode} // LIVE_FEED`;
+            const data = projectData[project];
             
-            // Lock the theme and content
-            document.body.classList.remove('acam-theme', 'collage-theme');
-            document.body.classList.add(`${project}-theme`);
-            mainDisplay.innerHTML = projectData[project].content;
+            // Set App Link
+            openAppLink.href = data.appUrl;
+            videoLabel.textContent = `${project.toUpperCase()} // LIVE_SIGNAL_ACTIVE`;
+            videoLabel.style.borderColor = data.accent;
 
-            // 1. Capture initial position
+            // Transition
             initialBounds = objectBox.getBoundingClientRect();
-
-            // 2. Set objectBox to fixed at current position
             objectBox.style.top = `${initialBounds.top}px`;
             objectBox.style.left = `${initialBounds.left}px`;
             objectBox.style.width = `${initialBounds.width}px`;
             objectBox.style.height = `${initialBounds.height}px`;
             objectBox.classList.add('zoomed');
 
-            // 3. Trigger zoom in the next frame
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     mainContainer.classList.add('is-expanded');
@@ -147,29 +192,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     objectBox.style.left = '0';
                     objectBox.style.width = '100vw';
                     objectBox.style.height = '100vh';
-                    startLiveLogic(project);
+                    
+                    startSlideshow(project);
+                    startTextDecoder(data.aboutText);
                 });
             });
         });
     });
 
-    // Collapse state
     const collapse = () => {
         if (!initialBounds) return;
 
-        // 1. Return to initial bounds
         objectBox.style.top = `${initialBounds.top}px`;
         objectBox.style.left = `${initialBounds.left}px`;
         objectBox.style.width = `${initialBounds.width}px`;
         objectBox.style.height = `${initialBounds.height}px`;
         mainContainer.classList.remove('is-expanded');
-        stopLiveLogic();
 
-        // 2. Remove fixed positioning after transition
+        if (slideshowInterval) clearInterval(slideshowInterval);
+        if (textDecoderInterval) clearInterval(textDecoderInterval);
+
         setTimeout(() => {
             objectBox.classList.remove('zoomed');
             document.body.classList.remove('acam-theme', 'collage-theme');
-            mainDisplay.innerHTML = defaultMission; // Revert to default
+            objectBox.classList.remove('has-preview', 'acam-preview', 'collage-preview');
+            mainDisplay.innerHTML = defaultMission;
             objectBox.style.top = '';
             objectBox.style.left = '';
             objectBox.style.width = '';
@@ -188,43 +235,4 @@ document.addEventListener('DOMContentLoaded', () => {
             collapse();
         }
     });
-
-    // Live Logic Generation
-    function generateMockLog(project) {
-        const timestamp = new Date().toISOString().substring(11, 23);
-        const hex = Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0').toUpperCase();
-        
-        const projectActions = {
-            acam: ['LENS_SYNC', 'DOF_CALC', 'SHUTTER_LOCK', 'TRACK_ACTIVE', 'GRID_RENDER'],
-            collage: ['ASSET_MAP', 'CHRONO_PARSE', 'TEXTURE_SYNC', 'INDEX_LOAD', 'DENSITY_CALC']
-        };
-
-        const actions = projectActions[project] || ['INIT', 'FETCH', 'AWAIT', 'SYNC'];
-        const action = actions[Math.floor(Math.random() * actions.length)];
-        return `[${timestamp}] ${action} :: 0x${hex} OK`;
-    }
-
-    function startLiveLogic(project) {
-        if (logicInterval) return;
-        liveLogicOverlay.textContent = '';
-        
-        let logs = [];
-        const maxLogs = 30;
-
-        logicInterval = setInterval(() => {
-            logs.push(generateMockLog(project));
-            if (logs.length > maxLogs) {
-                logs.shift();
-            }
-            liveLogicOverlay.textContent = logs.join('\n');
-            liveLogicOverlay.scrollTop = liveLogicOverlay.scrollHeight;
-        }, 150);
-    }
-
-    function stopLiveLogic() {
-        if (logicInterval) {
-            clearInterval(logicInterval);
-            logicInterval = null;
-        }
-    }
 });

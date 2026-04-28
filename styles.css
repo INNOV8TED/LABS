@@ -59,7 +59,7 @@ body {
     padding: var(--space-6);
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 100;
 }
 
 .is-expanded .project-list {
@@ -75,6 +75,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: var(--space-8);
+    position: relative;
 }
 
 .header h1 {
@@ -123,11 +124,12 @@ body {
     align-items: center;
     gap: var(--space-2);
     text-transform: uppercase;
+    position: relative;
+    z-index: 200;
 }
 
 .project-btn:hover {
     font-weight: 900;
-    text-decoration: none;
 }
 
 .status-tag {
@@ -165,6 +167,26 @@ body {
     color: #CCC;
 }
 
+.object-box::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 500ms ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.object-box.has-preview::after {
+    opacity: 0.15;
+}
+
+.acam-preview .object-box::after {
+    background-image: url('acam_slide_1.png');
+}
+
 .main-display {
     width: 100%;
     height: 100%;
@@ -174,6 +196,7 @@ body {
     justify-content: space-between;
     transition: opacity var(--transition-fast);
     z-index: 5;
+    position: relative;
 }
 
 .zoomed .main-display, .is-expanded .main-display {
@@ -260,15 +283,26 @@ h3 {
     width: 100%;
     height: 100%;
     opacity: 0;
-    display: flex;
+    display: grid;
+    grid-template-columns: 350px 1fr;
     align-items: center;
-    justify-content: center;
     transition: opacity var(--transition-zoom);
     background-color: var(--expanded-bg);
+    position: relative;
+    padding: var(--space-8);
 }
 
 .zoomed .immersive-content {
     opacity: 1;
+}
+
+.immersive-center-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: var(--space-6);
 }
 
 .exit-btn {
@@ -287,55 +321,111 @@ h3 {
 
 .feed-container {
     width: 100%;
-    max-width: 90%;
-    max-height: 85vh;
-    aspect-ratio: 9 / 16;
+    max-width: 800px;
+    aspect-ratio: 16 / 9;
     border: 1px solid var(--expanded-text);
     position: relative;
     z-index: 20;
-    background: #111;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    background: #000;
+    overflow: hidden;
 }
 
 .acam-theme .feed-container {
-    background-image: url('acam_preview.png');
+    aspect-ratio: 16 / 9; /* Wide aspect for A-CAM interface */
 }
 
-.collage-theme .feed-container {
-    background-image: url('collage_preview.png');
+.slide {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1000ms ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
 }
 
 .video-mock {
     color: var(--expanded-text);
-    font-size: 0.8rem;
+    font-size: 0.65rem;
     text-align: center;
-    background: rgba(0, 0, 0, 0.7);
-    padding: var(--space-1) var(--space-2);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2px var(--space-2);
     border: 1px solid var(--expanded-text);
     position: absolute;
-    bottom: var(--space-4);
-    left: var(--space-4);
+    bottom: var(--space-3);
+    left: var(--space-3);
     letter-spacing: 2px;
+    z-index: 30;
+}
+
+.immersive-actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.action-btn {
+    display: inline-block;
+    padding: var(--space-3) var(--space-6);
+    background: var(--expanded-text);
+    color: var(--expanded-bg);
+    text-decoration: none;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+    transition: all 300ms ease;
+    border: 2px solid var(--expanded-text);
+}
+
+.action-btn:hover {
+    background: transparent;
+    color: var(--expanded-text);
+}
+
+.btn-scan-line {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
+    animation: scan 2s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes scan {
+    0% { top: -100%; }
+    100% { top: 100%; }
 }
 
 .live-logic-overlay {
-    position: absolute;
-    top: var(--space-4);
-    left: var(--space-4);
-    bottom: var(--space-4);
     width: 300px;
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 0.75rem;
-    line-height: 1.5;
-    overflow: hidden;
-    white-space: pre-wrap;
-    z-index: 5;
-    pointer-events: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    height: 60vh;
+    overflow-y: auto;
+    padding-right: var(--space-4);
+    font-family: 'Courier New', Courier, monospace;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Custom Scrollbar for Brutalist feel */
+.live-logic-overlay::-webkit-scrollbar {
+    width: 4px;
+}
+.live-logic-overlay::-webkit-scrollbar-track {
+    background: #000;
+}
+.live-logic-overlay::-webkit-scrollbar-thumb {
+    background: #444;
 }
 
 @keyframes blink {
@@ -368,19 +458,26 @@ h3 {
         min-height: 60vh;
     }
 
+    .immersive-content {
+        grid-template-columns: 1fr;
+        padding: var(--space-4);
+        overflow-y: auto;
+    }
+
+    .live-logic-overlay {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: var(--space-6);
+        padding-bottom: var(--space-4);
+    }
+
     .header h1 {
         font-size: 2.2rem;
     }
 
     .quote {
         font-size: 2.2rem;
-    }
-
-    .main-display {
-        padding: var(--space-4);
-    }
-
-    .status-cell.label {
-        width: 80px;
     }
 }
