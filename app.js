@@ -55,6 +55,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Reset UI state (useful for back button)
+    function resetUI() {
+        blackout.classList.remove("active");
+        uiOverlay.classList.remove("hidden");
+        zoomContainer.classList.remove("active");
+        zoomContainer.innerHTML = "";
+        activeMobileApp = null;
+        if (currentTooltip) {
+            currentTooltip.classList.remove("active");
+            currentTooltip = null;
+        }
+    }
+
+    // Handle back button / page cache
+    window.addEventListener("pageshow", (event) => {
+        if (event.persisted) {
+            resetUI();
+            if (activeVideo) activeVideo.play();
+        }
+    });
+
     function preloadTransitions() {
         const videosToPreload = [
             "camzoom.mp4", "camzoomvert.mp4",
@@ -127,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("touchstart", (e) => {
         if (window.innerWidth <= 768) {
-            if (!e.target.classList.contains("hitbox")) {
+            if (!e.target.classList.contains("hitbox") && !e.target.closest(".main-site-btn")) {
                 if (currentTooltip) {
                     currentTooltip.classList.remove("active");
                     currentTooltip = null;
@@ -169,17 +190,13 @@ document.addEventListener("DOMContentLoaded", () => {
             blackout.classList.add("active");
             setTimeout(() => {
                 window.location.href = url;
-            }, 600); // Wait for blackout fade
+            }, 600);
         };
 
-        // Use ended event for perfect timing
         zoomVideo.onended = finishTransition;
-
-        // Fallback timer in case ended event doesnt fire (e.g. mobile throttled)
         const fallbackTimer = setTimeout(finishTransition, 4000); 
 
         zoomVideo.play().catch(error => {
-            console.log("Zoom play failed, fallback to muted:", error);
             zoomVideo.muted = true;
             zoomVideo.play();
         });
