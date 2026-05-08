@@ -3,98 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IN-NO-V8 LABS</title>
-    <meta name="description" content="IN-NO-V8 LABS Experimental Projects">
-    <link rel="stylesheet" href="styles.css">
+    <title>IN-NO-V8 LABS | Experimental R&D</title>
+    <meta name="description" content="IN-NO-V8 LABS: A private R&D environment for digital content workflows.">
+    
+    <!-- Premium Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,100..900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <main class="grid-container" id="main-container">
-        <!-- Left Navigation / Projects -->
-        <nav class="project-list" id="nav-pane">
-            <header class="header">
-                <h3>[ SYSTEM ]</h3>
-                <h1>IN-NO-V8 LABS</h1>
-                <div class="status-indicator">SYSTEM.ONLINE</div>
-            </header>
-            
-            <section class="directory">
-                <h3>[ DIRECTORY ]</h3>
-                <ul class="projects">
-                    <li>
-                        <button class="project-btn" data-project="acam">
-                            [01] A-CAM <span class="status-tag">[ PAID_ACCESS ]</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="project-btn" data-project="collage">
-                            [02] COLLAGE MACHINE <span class="status-tag">[ PRO_V1 ]</span>
-                        </button>
-                    </li>
-                </ul>
-            </section>
-            
-            <footer class="footer-info">
-                <span>[ V 1.0.2 ]</span>
-                <span>[ PATH: ROOT ]</span>
-            </footer>
-        </nav>
+    <div id="video-container">
+        <!-- Videos will be injected via JS for optimal responsive performance -->
+    </div>
 
-        <!-- Right Object Box Column -->
-        <section class="object-box-column">
-            <div class="object-box" id="object-box">
-                <!-- Active Workbench: Mission & Status -->
-                <div id="main-display" class="main-display">
-                    <div class="workbench-top">
-                        <h3>[ CMD ] // MISSION_STATEMENT</h3>
-                        <p class="quote">"I BUILD FOR THE WORKFLOWS THAT DON'T EXIST YET."</p>
-                        <div class="mission-text">
-                            <p>IN-NO-V8 LABS is a private R&D environment for digital content workflows. After 16 years of delivering content for HBO, Intel, and global festivals, I identified a recurring bottleneck: the gap between human creative intent and machine-learning randomness.</p>
-                        </div>
-                    </div>
+    <div class="ui-overlay">
+        <div class="corner-status top-left">
+            <span class="glitch-text" data-text="IN-NO-V8">IN-NO-V8</span>
+            <span class="system-tag">LABS.V1</span>
+        </div>
 
-                    <div class="workbench-bottom">
-                        <div class="system-status">
-                            <h3>[ LOG ] // SYSTEM_STATUS</h3>
-                            <div class="status-table">
-                                <div class="status-row">
-                                    <div class="status-cell label">PROJ_01</div>
-                                    <div class="status-cell value">A-CAM: "Director’s interface for cinematic AI. Precise shot logic for pro consistency."</div>
-                                </div>
-                                <div class="status-row">
-                                    <div class="status-cell label">PROJ_02</div>
-                                    <div class="status-cell value">Collage Machine: "Procedural asset arrangement for high-speed editorial curation."</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Immersive State content (Hidden initially) -->
-                <div class="immersive-content" id="immersive-content">
-                    <button class="exit-btn" id="exit-btn" aria-label="Exit immersive mode">[ ESC ]</button>
-                    
-                    <div class="immersive-center-wrap">
-                        <div class="feed-container" id="slideshow-container">
-                            <div class="slide active" id="slide-display"></div>
-                            <div class="video-mock" id="video-label">LIVE_SIGNAL_ACTIVE</div>
-                        </div>
-                        
-                        <div class="immersive-actions">
-                            <a href="#" id="open-app-link" target="_blank" class="action-btn">
-                                [ OPEN_APPLICATION ]
-                                <span class="btn-scan-line"></span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="live-logic-overlay" id="live-logic"></div>
-                </div>
-            </div>
-        </section>
-    </main>
+        <button id="sound-toggle" class="sound-btn" aria-label="Toggle Sound">
+            <span class="sound-icon-wrapper">
+                <svg id="icon-unmuted" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+                <svg id="icon-muted" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+            </span>
+            <span class="btn-text">AUDIO.OFF</span>
+        </button>
+    </div>
 
     <script src="app.js"></script>
 </body>
