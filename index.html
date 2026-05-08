@@ -1,46 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>IN-NO-V8 LABS | Experimental R&D</title>
-    <meta name="description" content="IN-NO-V8 LABS: A private R&D environment for digital content workflows.">
-    
-    <!-- Premium Typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,100..900&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="styles.css">
+    <meta name='description' content='IN-NO-V8 LABS: A private R&D environment for digital content workflows.'>
+    <link rel='preconnect' href='https://fonts.googleapis.com'>
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+    <link href='https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,100..900&display=swap' rel='stylesheet'>
+    <link rel='stylesheet' href='styles.css?v=4'>
 </head>
 <body>
-    <div id="video-container">
-        <!-- Videos will be injected via JS for optimal responsive performance -->
-    </div>
-
-    <div class="ui-overlay">
-        <div class="corner-status top-left">
-            <span class="glitch-text" data-text="IN-NO-V8">IN-NO-V8</span>
-            <span class="system-tag">LABS.V1</span>
+    <div id='preloader'>
+        <div class='loader-content'>
+            <div class='spinner'></div>
+            <div class='loader-text'>INITIALIZING LABS...</div>
         </div>
-
-        <button id="sound-toggle" class="sound-btn" aria-label="Toggle Sound">
-            <span class="sound-icon-wrapper">
-                <svg id="icon-unmuted" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+    </div>
+    <div id='video-container'></div>
+    <div id='interactive-layer'>
+        <div id='hitbox-acam' class='hitbox' data-app='acam'></div>
+        <div id='hitbox-collage' class='hitbox' data-app='collage'></div>
+        <div id='tooltip-acam' class='tooltip glass'>
+            <h3>A-CAM</h3>
+            <p>Director’s interface for cinematic AI. Precise shot logic for pro consistency.</p>
+        </div>
+        <div id='tooltip-collage' class='tooltip glass'>
+            <h3>COLLAGE MACHINE</h3>
+            <p>Procedural asset arrangement for high-speed editorial curation.</p>
+        </div>
+    </div>
+    <div class='ui-overlay'>
+        <div class='corner-status top-left'>
+            <span class='glitch-text' data-text='IN-NO-V8'>IN-NO-V8</span>
+            <span class='system-tag'>LABS.V1</span>
+        </div>
+        <button id='sound-toggle' class='sound-btn' aria-label='Toggle Sound'>
+            <span class='sound-icon-wrapper'>
+                <svg id='icon-unmuted' class='icon hidden' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'>
+                    <polygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'></polygon>
+                    <path d='M15.54 8.46a5 5 0 0 1 0 7.07'></path>
+                    <path d='M19.07 4.93a10 10 0 0 1 0 14.14'></path>
                 </svg>
-                <svg id="icon-muted" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                    <line x1="23" y1="9" x2="17" y2="15"></line>
-                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                <svg id='icon-muted' class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'>
+                    <polygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'></polygon>
+                    <line x1='23' y1='9' x2='17' y2='15'></line>
+                    <line x1='17' y1='9' x2='23' y2='15'></line>
                 </svg>
             </span>
-            <span class="btn-text">AUDIO.OFF</span>
+            <span class='btn-text'>AUDIO.OFF</span>
         </button>
     </div>
-
-    <script src="app.js"></script>
+    <script src='app.js?v=4'></script>
 </body>
 </html>
