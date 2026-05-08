@@ -69,8 +69,8 @@ body { background-color: var(--bg-color); color: var(--accent-color); font-famil
 
 .tooltip { 
     position: fixed; 
-    width: 240px; 
-    min-height: 180px;
+    width: 280px; 
+    min-height: 200px;
     padding: 1.5rem; 
     pointer-events: none; 
     opacity: 0; 
