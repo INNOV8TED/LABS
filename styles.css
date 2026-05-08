@@ -65,8 +65,7 @@ body { background-color: var(--bg-color); color: var(--accent-color); font-famil
     pointer-events: auto;
     position: fixed;
     bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 2rem; /* Move to bottom left */
     z-index: 20;
     opacity: 0.6;
     transition: all 0.4s ease;
@@ -74,11 +73,11 @@ body { background-color: var(--bg-color); color: var(--accent-color); font-famil
 
 .main-site-btn:hover {
     opacity: 1;
-    transform: translateX(-50%) translateY(-5px);
+    transform: translateY(-5px);
 }
 
 .main-site-btn img {
-    height: 40px;
+    height: 70px; /* Larger size to match title visual weight */
     width: auto;
 }
 
@@ -128,8 +127,8 @@ body { background-color: var(--bg-color); color: var(--accent-color); font-famil
     #hitbox-acam { top: 50%; left: 5%; width: 40%; height: 30%; }
     #hitbox-collage { top: 15%; left: 50%; width: 45%; height: 70%; }
     .tooltip { width: 200px; min-height: 150px; }
-    .main-site-btn { bottom: 1.5rem; }
-    .main-site-btn img { height: 30px; }
+    .main-site-btn { bottom: 2rem; left: 2rem; }
+    .main-site-btn img { height: 50px; }
 }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
