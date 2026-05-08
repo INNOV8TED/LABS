@@ -190,18 +190,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("mousemove", (e) => {
         if (currentTooltip && window.innerWidth > 768) {
-            currentTooltip.style.left = `${e.clientX}px`;
-            currentTooltip.style.top = `${e.clientY}px`;
+            currentTooltip.style.left = e.clientX + "px";
+            currentTooltip.style.top = e.clientY + "px";
         }
     });
 
     hitboxes.forEach(hitbox => {
         if (hitbox.id === "hitbox-news") return;
-        hitbox.addEventListener("mouseenter", () => {
+        hitbox.addEventListener("mouseenter", (e) => {
             if (window.innerWidth > 768) {
                 const app = hitbox.dataset.app;
                 if (tooltips[app]) {
                     currentTooltip = tooltips[app];
+                    currentTooltip.style.left = e.clientX + "px";
+                    currentTooltip.style.top = e.clientY + "px";
                     currentTooltip.classList.add("active");
                     AudioEngine.playBlip();
                 }
