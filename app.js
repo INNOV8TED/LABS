@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 v.preload = "auto";
                 v.muted = true;
                 v.playsInline = true;
+                v.setAttribute("webkit-playsinline", "true");
                 v.style.display = "none";
                 document.body.appendChild(v);
                 preloadedVideos[src] = v;
@@ -111,18 +112,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (activeMobileApp !== app) {
                     e.preventDefault();
                     if (currentTooltip) currentTooltip.classList.remove("active");
-                    
                     currentTooltip = tooltips[app];
                     currentTooltip.classList.add("active");
                     currentTooltip.style.left = "50%";
                     currentTooltip.style.top = "50%";
-                    
                     activeMobileApp = app;
                     return;
                 }
             }
 
-            // User gesture context starts here
             triggerTransition(app, hitbox.dataset.url);
         });
     });
@@ -151,7 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const zoomVideo = preloadedVideos[zoomSrc];
         if (!zoomVideo) {
-            // Fallback: navigate immediately if video not ready
             window.location.href = url;
             return;
         }
@@ -159,21 +156,30 @@ document.addEventListener("DOMContentLoaded", () => {
         uiOverlay.classList.add("hidden");
         if (currentTooltip) currentTooltip.classList.remove("active");
 
+        // Prepare zoom container
         zoomContainer.innerHTML = "";
         zoomVideo.style.display = "block";
         zoomVideo.muted = isMuted;
+        zoomVideo.playsInline = true;
+        zoomVideo.setAttribute("webkit-playsinline", "true");
         zoomContainer.appendChild(zoomVideo);
+        zoomContainer.classList.add("active"); // Bring to front
         zoomVideo.currentTime = 0;
         
-        // Play immediately within the gesture handler
+        // Robust play attempt
         const playPromise = zoomVideo.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Zoom video play failed, falling back to muted play:", error);
+                zoomVideo.muted = true;
+                zoomVideo.play();
+            });
+        }
 
         setTimeout(() => {
             blackout.classList.add("active");
         }, 2200);
 
-        // Navigate in the same tab to avoid popup blockers
-        // This is the most reliable pattern for mobile "portal" transitions
         setTimeout(() => {
             window.location.href = url;
         }, 2800);
