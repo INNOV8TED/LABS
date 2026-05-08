@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let activeVideo = null;
     let isMuted = true;
     let currentTooltip = null;
-    let activeMobileApp = null; // Track active tooltip on mobile
+    let activeMobileApp = null;
     const preloadedVideos = {};
 
     function initVideo() {
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     window.addEventListener("mousemove", (e) => {
-        if (currentTooltip) {
+        if (currentTooltip && window.innerWidth > 768) {
             const x = e.clientX;
             const y = e.clientY;
             currentTooltip.style.left = `${x}px`;
@@ -109,27 +109,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (isMobile) {
                 if (activeMobileApp !== app) {
-                    // First tap on mobile: show tooltip
                     e.preventDefault();
                     if (currentTooltip) currentTooltip.classList.remove("active");
                     
                     currentTooltip = tooltips[app];
                     currentTooltip.classList.add("active");
-                    // On mobile, position tooltip in a fixed safe area or follow tap
                     currentTooltip.style.left = "50%";
                     currentTooltip.style.top = "50%";
                     
                     activeMobileApp = app;
                     return;
                 }
-                // Second tap: trigger transition
             }
 
+            // User gesture context starts here
             triggerTransition(app, hitbox.dataset.url);
         });
     });
 
-    // Close mobile tooltip if tapping elsewhere
     window.addEventListener("touchstart", (e) => {
         if (window.innerWidth <= 768) {
             if (!e.target.classList.contains("hitbox")) {
@@ -153,7 +150,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const zoomVideo = preloadedVideos[zoomSrc];
-        if (!zoomVideo) return;
+        if (!zoomVideo) {
+            // Fallback: navigate immediately if video not ready
+            window.location.href = url;
+            return;
+        }
 
         uiOverlay.classList.add("hidden");
         if (currentTooltip) currentTooltip.classList.remove("active");
@@ -163,22 +164,18 @@ document.addEventListener("DOMContentLoaded", () => {
         zoomVideo.muted = isMuted;
         zoomContainer.appendChild(zoomVideo);
         zoomVideo.currentTime = 0;
-        zoomVideo.play();
+        
+        // Play immediately within the gesture handler
+        const playPromise = zoomVideo.play();
 
         setTimeout(() => {
             blackout.classList.add("active");
         }, 2200);
 
+        // Navigate in the same tab to avoid popup blockers
+        // This is the most reliable pattern for mobile "portal" transitions
         setTimeout(() => {
-            window.open(url, "_blank");
-            setTimeout(() => {
-                blackout.classList.remove("active");
-                uiOverlay.classList.remove("hidden");
-                zoomVideo.style.display = "none";
-                document.body.appendChild(zoomVideo);
-                zoomContainer.innerHTML = "";
-                activeMobileApp = null; // Reset mobile state
-            }, 2000);
+            window.location.href = url;
         }, 2800);
     }
 
