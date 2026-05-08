@@ -32,9 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- AUDIO ENGINE ---
     const AudioEngine = {
-        ctx: null,
-        hum: null,
-        humGain: null,
+        ctx: null, hum: null, humGain: null,
         init() {
             if (this.ctx) return;
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -46,13 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
             this.hum.buffer = noiseBuffer;
             this.hum.loop = true;
             const filter = this.ctx.createBiquadFilter();
-            filter.type = "lowpass";
-            filter.frequency.value = 150;
-            this.humGain = this.ctx.createGain();
-            this.humGain.gain.value = 0;
-            this.hum.connect(filter);
-            filter.connect(this.humGain);
-            this.humGain.connect(this.ctx.destination);
+            filter.type = "lowpass"; filter.frequency.value = 150;
+            this.humGain = this.ctx.createGain(); this.humGain.gain.value = 0;
+            this.hum.connect(filter); filter.connect(this.humGain); this.humGain.connect(this.ctx.destination);
             this.hum.start();
         },
         setMute(muted) {
@@ -62,14 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         playBlip() {
             if (isMuted || !this.ctx) return;
-            const osc = this.ctx.createOscillator();
-            const g = this.ctx.createGain();
-            osc.type = "square";
-            osc.frequency.value = 800;
+            const osc = this.ctx.createOscillator(); const g = this.ctx.createGain();
+            osc.type = "square"; osc.frequency.value = 800;
             g.gain.setValueAtTime(0.02, this.ctx.currentTime);
             g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.1);
-            osc.connect(g);
-            g.connect(this.ctx.destination);
+            osc.connect(g); g.connect(this.ctx.destination);
             osc.start(); osc.stop(this.ctx.currentTime + 0.1);
         },
         playWhoosh() {
@@ -81,8 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
             for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
             noise.buffer = buffer;
             const filter = this.ctx.createBiquadFilter();
-            filter.type = "lowpass";
-            filter.frequency.setValueAtTime(100, this.ctx.currentTime);
+            filter.type = "lowpass"; filter.frequency.setValueAtTime(100, this.ctx.currentTime);
             filter.frequency.exponentialRampToValueAtTime(3000, this.ctx.currentTime + 0.5);
             const g = this.ctx.createGain();
             g.gain.setValueAtTime(0, this.ctx.currentTime);
@@ -90,6 +80,36 @@ document.addEventListener("DOMContentLoaded", () => {
             g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 1);
             noise.connect(filter); filter.connect(g); g.connect(this.ctx.destination);
             noise.start();
+        }
+    };
+
+    // --- SCRAMBLE TEXT ENGINE ---
+    const ScrambleEngine = {
+        chars: "!<>-_\\/[]{}—=+*^?#________",
+        scramble(el, duration = 1000) {
+            const originalText = el.innerText;
+            let frame = 0;
+            const totalFrames = Math.floor(duration / 16);
+            
+            const update = () => {
+                let output = "";
+                let complete = 0;
+                for (let i = 0; i < originalText.length; i++) {
+                    const char = originalText[i];
+                    if (char === " " || i < (frame / totalFrames) * originalText.length) {
+                        output += char;
+                        complete++;
+                    } else {
+                        output += this.chars[Math.floor(Math.random() * this.chars.length)];
+                    }
+                }
+                el.innerText = output;
+                if (complete < originalText.length) {
+                    frame++;
+                    requestAnimationFrame(update);
+                }
+            };
+            update();
         }
     };
 
@@ -114,14 +134,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!videoContainer.querySelector("video")) {
             const video = document.createElement("video");
             video.src = videoSrc; video.loop = true; video.muted = isMuted; video.playsInline = true;
-            video.setAttribute("webkit-playsinline", "true");
-            video.dataset.mobile = isMobile;
+            video.setAttribute("webkit-playsinline", "true"); video.dataset.mobile = isMobile;
             video.oncanplaythrough = () => {
                 video.classList.add("loaded");
                 setTimeout(() => {
                     if (preloader) preloader.classList.add("hidden");
-                    preloadTransitions();
-                    TerminalLogic.init();
+                    preloadTransitions(); TerminalLogic.init();
                 }, 800);
             };
             videoContainer.appendChild(video);
@@ -146,16 +164,24 @@ document.addEventListener("DOMContentLoaded", () => {
     function openNews() {
         newsPanel.classList.add("active");
         AudioEngine.playBlip();
+        
+        // Trigger scramble on titles and paragraphs
+        setTimeout(() => {
+            newsPanel.querySelectorAll("h3, p, .news-meta").forEach((el, index) => {
+                setTimeout(() => ScrambleEngine.scramble(el, 800), index * 100);
+            });
+        }, 300);
     }
-    function closeNews() {
-        newsPanel.classList.remove("active");
-    }
+    function closeNews() { newsPanel.classList.remove("active"); }
 
     newsToggle.addEventListener("click", openNews);
     newsClose.addEventListener("click", closeNews);
     
     hitboxNews.addEventListener("mouseenter", () => {
-        if (window.innerWidth > 768) newsTicker.classList.add("active");
+        if (window.innerWidth > 768) {
+            newsTicker.classList.add("active");
+            ScrambleEngine.scramble(newsTicker.querySelector(".ticker-inner"), 500);
+        }
     });
     hitboxNews.addEventListener("mouseleave", () => {
         if (window.innerWidth > 768) newsTicker.classList.remove("active");
