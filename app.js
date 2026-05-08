@@ -191,13 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
             currentTooltip.style.left = `${x}px`;
             currentTooltip.style.top = `${y}px`;
         }
-
-        // Parallax effect
-        if (window.innerWidth > 768) {
-            const moveX = (x - window.innerWidth / 2) / 50;
-            const moveY = (y - window.innerHeight / 2) / 50;
-            videoContainer.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        }
     });
 
     hitboxes.forEach(hitbox => {
