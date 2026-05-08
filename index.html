@@ -9,7 +9,7 @@
     <link rel='preconnect' href='https://fonts.googleapis.com'>
     <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
     <link href='https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,100..900&display=swap' rel='stylesheet'>
-    <link rel='stylesheet' href='styles.css?v=8'>
+    <link rel='stylesheet' href='styles.css?v=9'>
 </head>
 <body>
     <div id='preloader'>
@@ -24,13 +24,23 @@
     <div id='interactive-layer'>
         <div id='hitbox-acam' class='hitbox' data-app='acam' data-url='https://a-cam.in-no-v8.com/'></div>
         <div id='hitbox-collage' class='hitbox' data-app='collage' data-url='https://collage.in-no-v8.com/'></div>
+        
         <div id='tooltip-acam' class='tooltip glass'>
+            <div class='tooltip-meta'>
+                <span class='status-dot'></span> ONLINE • BUILD.26.05
+            </div>
             <h3>A-CAM</h3>
             <p>Director's interface for cinematic AI. Precise shot logic for pro consistency. A-CAM bridges the gap between creative intent and procedural generation, allowing filmmakers to maintain rigorous control over cinematic language.</p>
+            <div class='click-hint'>CLICK TO INITIALIZE TRANSITION</div>
         </div>
+        
         <div id='tooltip-collage' class='tooltip glass'>
+            <div class='tooltip-meta'>
+                <span class='status-dot'></span> ONLINE • BUILD.26.05
+            </div>
             <h3>COLLAGE MACHINE</h3>
             <p>Procedural asset arrangement for high-speed editorial curation. The Collage Machine automates the complex layout of visual assets, enabling rapid exploration of narrative structures in real-time.</p>
+            <div class='click-hint'>CLICK TO INITIALIZE TRANSITION</div>
         </div>
     </div>
     <div class='ui-overlay'>
@@ -38,11 +48,9 @@
             <span class='glitch-text' data-text='IN-NO-V8'>IN-NO-V8</span>
             <span class='system-tag'>LABS.V1</span>
         </div>
-
         <a href='https://in-no-v8.com' class='main-site-btn' aria-label='Go to main website'>
             <img src='main_logo.png' alt='IN-NO-V8 Logo'>
         </a>
-
         <button id='sound-toggle' class='sound-btn' aria-label='Toggle Sound'>
             <span class='sound-icon-wrapper'>
                 <svg id='icon-unmuted' class='icon hidden' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'>
@@ -59,6 +67,6 @@
             <span class='btn-text'>AUDIO.OFF</span>
         </button>
     </div>
-    <script src='app.js?v=8'></script>
+    <script src='app.js?v=9'></script>
 </body>
 </html>
