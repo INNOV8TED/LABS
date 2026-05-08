@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let activeVideo = null;
     let isMuted = true;
     let currentTooltip = null;
+    let activeMobileApp = null; // Track active tooltip on mobile
     const preloadedVideos = {};
 
     function initVideo() {
@@ -59,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "camzoom.mp4", "camzoomvert.mp4",
             "projzoom.mp4", "projzoomvert.mp4"
         ];
-
         videosToPreload.forEach(src => {
             if (!preloadedVideos[src]) {
                 const v = document.createElement("video");
@@ -85,24 +85,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
     hitboxes.forEach(hitbox => {
         hitbox.addEventListener("mouseenter", () => {
-            const app = hitbox.dataset.app;
-            if (tooltips[app]) {
-                currentTooltip = tooltips[app];
-                currentTooltip.classList.add("active");
-                // Background blur removed per user request
+            if (window.innerWidth > 768) {
+                const app = hitbox.dataset.app;
+                if (tooltips[app]) {
+                    currentTooltip = tooltips[app];
+                    currentTooltip.classList.add("active");
+                }
             }
         });
 
         hitbox.addEventListener("mouseleave", () => {
-            if (currentTooltip) {
-                currentTooltip.classList.remove("active");
-                currentTooltip = null;
+            if (window.innerWidth > 768) {
+                if (currentTooltip) {
+                    currentTooltip.classList.remove("active");
+                    currentTooltip = null;
+                }
             }
         });
 
-        hitbox.addEventListener("click", () => {
-            triggerTransition(hitbox.dataset.app, hitbox.dataset.url);
+        hitbox.addEventListener("click", (e) => {
+            const app = hitbox.dataset.app;
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                if (activeMobileApp !== app) {
+                    // First tap on mobile: show tooltip
+                    e.preventDefault();
+                    if (currentTooltip) currentTooltip.classList.remove("active");
+                    
+                    currentTooltip = tooltips[app];
+                    currentTooltip.classList.add("active");
+                    // On mobile, position tooltip in a fixed safe area or follow tap
+                    currentTooltip.style.left = "50%";
+                    currentTooltip.style.top = "50%";
+                    
+                    activeMobileApp = app;
+                    return;
+                }
+                // Second tap: trigger transition
+            }
+
+            triggerTransition(app, hitbox.dataset.url);
         });
+    });
+
+    // Close mobile tooltip if tapping elsewhere
+    window.addEventListener("touchstart", (e) => {
+        if (window.innerWidth <= 768) {
+            if (!e.target.classList.contains("hitbox")) {
+                if (currentTooltip) {
+                    currentTooltip.classList.remove("active");
+                    currentTooltip = null;
+                    activeMobileApp = null;
+                }
+            }
+        }
     });
 
     function triggerTransition(app, url) {
@@ -128,7 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
         zoomVideo.currentTime = 0;
         zoomVideo.play();
 
-        // Fade to black later and shorter (2200ms timeout)
         setTimeout(() => {
             blackout.classList.add("active");
         }, 2200);
@@ -141,8 +177,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 zoomVideo.style.display = "none";
                 document.body.appendChild(zoomVideo);
                 zoomContainer.innerHTML = "";
+                activeMobileApp = null; // Reset mobile state
             }, 2000);
-        }, 2800); // Navigation slightly delayed to match later fade
+        }, 2800);
     }
 
     function toggleSound() {
