@@ -156,33 +156,33 @@ document.addEventListener("DOMContentLoaded", () => {
         uiOverlay.classList.add("hidden");
         if (currentTooltip) currentTooltip.classList.remove("active");
 
-        // Prepare zoom container
         zoomContainer.innerHTML = "";
         zoomVideo.style.display = "block";
         zoomVideo.muted = isMuted;
         zoomVideo.playsInline = true;
         zoomVideo.setAttribute("webkit-playsinline", "true");
         zoomContainer.appendChild(zoomVideo);
-        zoomContainer.classList.add("active"); // Bring to front
+        zoomContainer.classList.add("active");
         zoomVideo.currentTime = 0;
         
-        // Robust play attempt
-        const playPromise = zoomVideo.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.log("Zoom video play failed, falling back to muted play:", error);
-                zoomVideo.muted = true;
-                zoomVideo.play();
-            });
-        }
-
-        setTimeout(() => {
+        const finishTransition = () => {
             blackout.classList.add("active");
-        }, 2200);
+            setTimeout(() => {
+                window.location.href = url;
+            }, 600); // Wait for blackout fade
+        };
 
-        setTimeout(() => {
-            window.location.href = url;
-        }, 2800);
+        // Use ended event for perfect timing
+        zoomVideo.onended = finishTransition;
+
+        // Fallback timer in case ended event doesnt fire (e.g. mobile throttled)
+        const fallbackTimer = setTimeout(finishTransition, 4000); 
+
+        zoomVideo.play().catch(error => {
+            console.log("Zoom play failed, fallback to muted:", error);
+            zoomVideo.muted = true;
+            zoomVideo.play();
+        });
     }
 
     function toggleSound() {
