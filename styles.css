@@ -14,11 +14,6 @@ body { background-color: var(--bg-color); color: var(--accent-color); font-famil
 #video-container { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; 
     background-color: var(--bg-color);
-    transition: filter 0.8s ease;
-}
-
-#video-container.blurred {
-    filter: blur(15px) brightness(0.6);
 }
 
 #video-container video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease-in-out; }
@@ -39,7 +34,7 @@ body { background-color: var(--bg-color); color: var(--accent-color); font-famil
     background: black;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 1.2s ease-in-out;
+    transition: opacity 0.6s ease-in-out; /* Shorter transition per user request */
 }
 
 #blackout.active {
@@ -73,8 +68,8 @@ body { background-color: var(--bg-color); color: var(--accent-color); font-famil
 .hitbox { position: absolute; pointer-events: auto; cursor: pointer; background: rgba(255, 255, 255, 0); transition: background 0.3s ease; }
 
 .tooltip { 
-    position: fixed; /* Fixed for mouse following */
-    width: 240px; /* More boxy */
+    position: fixed; 
+    width: 240px; 
     min-height: 180px;
     padding: 1.5rem; 
     pointer-events: none; 

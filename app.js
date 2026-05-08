@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 video.classList.add("loaded");
                 setTimeout(() => {
                     if (preloader) preloader.classList.add("hidden");
-                    preloadTransitions(); // Start preloading others after main is ready
+                    preloadTransitions();
                 }, 800);
             };
 
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const v = document.createElement("video");
                 v.src = src;
                 v.preload = "auto";
-                v.muted = true; // Preload muted to avoid policy issues
+                v.muted = true;
                 v.playsInline = true;
                 v.style.display = "none";
                 document.body.appendChild(v);
@@ -74,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Mouse Movement for Tooltips
     window.addEventListener("mousemove", (e) => {
         if (currentTooltip) {
             const x = e.clientX;
@@ -84,14 +83,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Interaction handling
     hitboxes.forEach(hitbox => {
         hitbox.addEventListener("mouseenter", () => {
             const app = hitbox.dataset.app;
             if (tooltips[app]) {
                 currentTooltip = tooltips[app];
                 currentTooltip.classList.add("active");
-                videoContainer.classList.add("blurred");
+                // Background blur removed per user request
             }
         });
 
@@ -99,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (currentTooltip) {
                 currentTooltip.classList.remove("active");
                 currentTooltip = null;
-                videoContainer.classList.remove("blurred");
             }
         });
 
@@ -119,14 +116,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const zoomVideo = preloadedVideos[zoomSrc];
-        if (!zoomVideo) return; // Fallback if not preloaded yet
+        if (!zoomVideo) return;
 
-        // 1. Hide UI and tooltips
         uiOverlay.classList.add("hidden");
         if (currentTooltip) currentTooltip.classList.remove("active");
-        videoContainer.classList.remove("blurred");
 
-        // 2. Play zoom video
         zoomContainer.innerHTML = "";
         zoomVideo.style.display = "block";
         zoomVideo.muted = isMuted;
@@ -134,24 +128,21 @@ document.addEventListener("DOMContentLoaded", () => {
         zoomVideo.currentTime = 0;
         zoomVideo.play();
 
-        // 3. Fade to black near the end of video
+        // Fade to black later and shorter (2200ms timeout)
         setTimeout(() => {
             blackout.classList.add("active");
-        }, 1500);
+        }, 2200);
 
-        // 4. Open URL
         setTimeout(() => {
             window.open(url, "_blank");
-            
-            // Optional: Reset state after a delay if user returns
             setTimeout(() => {
                 blackout.classList.remove("active");
                 uiOverlay.classList.remove("hidden");
                 zoomVideo.style.display = "none";
-                document.body.appendChild(zoomVideo); // Move back to body for preloading
+                document.body.appendChild(zoomVideo);
                 zoomContainer.innerHTML = "";
             }, 2000);
-        }, 2500);
+        }, 2800); // Navigation slightly delayed to match later fade
     }
 
     function toggleSound() {
